@@ -3,69 +3,45 @@
 
 using namespace std;
 void convertValues(string time, int& hour, int& minute);
+bool isCheckedData(string time);
+
 int main(){
 	setlocale(LC_ALL, "ru");
-
+	const int MIN60 = 60;
 	string timeDeparture, timeArrival;
-	cout << "Введите время отправления(HH:MM) :";
-	//getline(cin, timeDeparture);
-	cout << "Введите время прибытия(HH:MM) : ";
-	//getline(cin, timeArrival);
+	cout << "Введите время отправления в формате (ЧЧ:MM)\n";
+	getline(cin, timeDeparture);
+	cout << "Введите время прибытия в формате (ЧЧ:MM)\n";
+	getline(cin, timeArrival);
 
-	timeDeparture = "12:33";
-	timeArrival = "15:40";
 	int hourDeparture=0, minuteDeparture=0;
 	int hourArrival =0, minuteArrival=0;
-/*
- unsigned int i = 0,
 
-	while (i < timeDeparture.length())
+	if(isCheckedData(timeDeparture))
+		convertValues(timeDeparture, hourDeparture, minuteDeparture);
+
+	if(isCheckedData(timeArrival))
+		convertValues(timeArrival, hourArrival, minuteArrival);
+
+	int hoursTrip, minutesTrip;
+	//int min = 60 - minuteDeparture;
+
+	if((minuteArrival + MIN60 - minuteDeparture)>= MIN60)
+		{
+		   minutesTrip=(minuteArrival + MIN60 - minuteDeparture) % MIN60;
+		}
+
+	if(hourArrival == hourDeparture && minuteArrival == minuteDeparture)
 	{
-		if (timeDeparture[i] <= '0' && timeDeparture[i] >= '9'&& timeDeparture[i] != ':')
-			cout << "Ошибка!";
-
-		if(timeDeparture[i]!=':')
-		{
-			switch(i)
-			{
-			 case 0:
-				hourDeparture = 10 * ((int)timeDeparture[i] - (int)'0');
-				break;
-			 case 1:
-				hourDeparture = hourDeparture + ((int)timeDeparture[i] - (int)'0');
-				break;
-			 case 3:
-				minuteDeparture = 10* ((int)timeDeparture[i] - (int)'0');
-				break;
-			 case 4:
-				minuteDeparture = minuteDeparture + ((int)timeDeparture[i] - (int)'0');
-				break;
-			}
-		}
-		else
-		{
-			i++;
-			continue;
-		}
-	    i++;
+		hoursTrip = 24;
+		minutesTrip = 0;
 	}
-
-	//hours=h1+h2;
-	//minutes=min1+min2;
-	//cout << h<< " : "<<min<< endl;
-
-	 */
-	convertValues(timeDeparture, hourDeparture, minuteDeparture);
-	convertValues(timeArrival, hourArrival, minuteArrival);
-
-	int hoursResult;
-	if(hourArrival<hourDeparture)
-		hoursResult = abs(24 - hourDeparture)+hourArrival;
+	else if(hourArrival < hourDeparture)
+		hoursTrip = abs(24 - hourDeparture) + hourArrival;
 	else
-		hoursResult=hourArrival-hourDeparture;
-	cout << "Поездка составила " << hoursResult <<" ч."<< minuteDeparture << " мин \n";
+		hoursTrip=hourArrival-hourDeparture;
 
-	system("pause>1");
+	cout << "Поездка составила " << hoursTrip <<" часа "<< minutesTrip << " мин \n";
 	return 0;
 }
 
@@ -75,8 +51,8 @@ void convertValues(string time, int& hour, int& minute)
 
 	while (i < time.length())
 		{
-			if (time[i] <= '0' && time[i] >= '9'&& time[i] != ':')
-				cout << "Ошибка!";
+			//if (time[i] <= '0' && time[i] >= '9'&& time[i] != ':')
+				//cout << "Ошибка!";
 
 			if(time[i]!=':')
 			{
@@ -104,4 +80,24 @@ void convertValues(string time, int& hour, int& minute)
 		    i++;
 		}
 	return;
+}
+
+bool IsCheckedData(string t)
+{
+	unsigned int i=0;
+	bool error = false;
+	while (i < t.length())
+	{
+		if (t[i] <= '0' && t[i] >= '9' && t[i] != ':')
+		{
+			cout << "Ошибка! Вы ввели неверный формат времени.\n";
+			error=true;
+		}
+		else
+			i++;
+	}
+	if(!error)
+		return true;
+	else
+		return false;
 }
