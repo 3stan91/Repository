@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 using namespace std;
 bool convertStrToInt(string, int&, int&);
@@ -30,12 +30,12 @@ int main() {
 	const int MIN60 = 60;
 	string timeDeparture, timeArrival;
 	cout << "Введите время отправления в формате (ЧЧ:MM)\n";
-//	getline(cin, timeDeparture);
+	getline(cin, timeDeparture);
 	cout << "Введите время прибытия в формате (ЧЧ:MM)\n";
-//	getline(cin, timeArrival);
+	getline(cin, timeArrival);
 
-	timeDeparture = "23:25";
-	timeArrival = "14:55";
+//	timeDeparture = "23:59";
+//	timeArrival = "4:55";
 	int hourDeparture = 0, minuteDeparture = 0;
 	int hourArrival = 0, minuteArrival = 0;
 
@@ -47,7 +47,7 @@ int main() {
 		return -1;
 
 	int hoursTrip, minutesTrip;
-	int min = 60 - minuteDeparture;
+	int min = MIN60 - minuteDeparture;
 
 	if (minuteArrival >= minuteDeparture)
 		minutesTrip = minuteArrival - minuteDeparture;
@@ -55,7 +55,6 @@ int main() {
 		hourArrival -= 1;
 		minutesTrip = minuteArrival + min;
 	}
-	//else		minutesTrip = min + minuteArrival;
 
 	if (hourArrival == hourDeparture && minuteArrival == minuteDeparture) {
 		hoursTrip = 24;
@@ -75,14 +74,17 @@ bool convertStrToInt(string time, int &hour, int &minute) {
 	bool error = false;
 
 	while (i < time.length()) {
+
+		if (time[1] == ':')
+			time = '0' + time;
+
 		if ((time[0] >= '2' && time[1] >= '4')
 				|| (time[i] == ':' && time[i + 1] > '5')
 				|| (time[i] <= '0' && time[i] >= '9')) {
 			cout << "Ошибка! Вы ввели неверный формат времени.\n";
 			error = true;
 			break;
-		} else if (time[1] == ':')
-			time = '0' + time;
+		}
 
 		if (time[i] != ':') {
 			switch (i) {
@@ -105,9 +107,9 @@ bool convertStrToInt(string time, int &hour, int &minute) {
 		}
 		i++;
 	}
-	if (!error)
-		return true;
-	else
+	if (error)
 		return false;
+	else
+		return true;
 }
 
